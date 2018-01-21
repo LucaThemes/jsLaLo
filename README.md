@@ -11,7 +11,7 @@ Include **jslalo.js** file in your website header:
 
 Add **lazy** class to each element that needs to be lazy loaded:
 ```
-<div class="**lazy**">content</div>
+<div class="lazy">content</div>
 ```
 
 Then call the **jsLaLo** function:
