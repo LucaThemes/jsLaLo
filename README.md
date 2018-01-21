@@ -26,7 +26,7 @@ addListenerMulti( window, 'scroll load', function() { jsLaLo() } );
 
 ## Version
 
-0.0.1
+0.0.1 - 2018-01-21
 
 ## License
 
