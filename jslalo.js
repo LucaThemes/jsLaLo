@@ -2,7 +2,7 @@ function jsLaLo() {
 	
 	/**
 	 * Add this class to each element that 
-	 * needs to be lazy loaded
+	 * needs to be lazy loded
 	 */
 	var lazyClass = ".lazy";
 	
@@ -55,6 +55,13 @@ function jsLaLo() {
 		
 		
 		/**
+		 * Distance from the natural position of div, 
+		 * will add slight moving effect
+		 */
+		var distance = 45;
+		
+		
+		/**
 		 * Position of scroll
 		 */
 		var yscroll = window.pageYOffset + innerHeight || document.documentElement.scrollTop + innerHeight;
@@ -66,11 +73,21 @@ function jsLaLo() {
 				// Stop the clock if opacity is equal or greater than 1
 				if ( opacity >= 1 ) {
 					clearInterval(timer);
+					distance = 0; 
+					/* TODO - distance value needs to be reset as it never reaches value of "0" */
 				}
-				lazySelector[index].style.opacity = opacity;
-				opacity += opacity * 0.1;
 				
-			}, 20);
+				// Add distance effect
+				if ( distance > 0 ) {
+					distance -= distance * 0.05;
+				}
+				lazySelector[index].style.transform = "translateY(" + distance + "px)";
+				
+				// Add opacity effect
+				lazySelector[index].style.opacity = opacity;
+				opacity += opacity * 0.03;
+				
+			}, 10);
 			
 			// Add class to loaded element to prevent any more actions on it
 			lazySelector[index].classList.add("lazy-loaded");
