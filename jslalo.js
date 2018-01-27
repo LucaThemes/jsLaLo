@@ -1,4 +1,7 @@
+// Lazy load
 function jsLaLo() {
+	
+	"use strict";
 	
 	/**
 	 * Add this class to each element that 
@@ -19,12 +22,6 @@ function jsLaLo() {
 	if ( lazySelector.length > 0 ) {
 		
 		/**
-		 * Index - needed for iteration
-		 */
-		var index = 0;
-		
-		
-		/**
 		 * Amount of items with lazySelector class
 		 */
 		var elems = lazySelector.length;
@@ -40,12 +37,6 @@ function jsLaLo() {
 		 * Initial item opacity, greater than 0
 		 */
 		var opacity = 0.1;
-		
-		
-		/**
-		 * Position of lazy loaded element from the top
-		 */
-		var ypos = lazySelector[index].offsetTop;
 		
 		
 		/**
@@ -66,34 +57,60 @@ function jsLaLo() {
 		 */
 		var yscroll = window.pageYOffset + innerHeight || document.documentElement.scrollTop + innerHeight;
 		
-		if ( yscroll > ypos + offset ) {
 		
-			var timer = setInterval( function () {
-				
-				// Stop the clock if opacity is equal or greater than 1
-				if ( opacity >= 1 ) {
-					clearInterval(timer);
-					distance = 0; 
-					/* TODO - distance value needs to be reset as it never reaches value of "0" */
-				}
-				
-				// Add distance effect
-				if ( distance > 0 ) {
-					distance -= distance * 0.05;
-				}
-				lazySelector[index].style.transform = "translateY(" + distance + "px)";
-				
-				// Add opacity effect
-				lazySelector[index].style.opacity = opacity;
-				opacity += opacity * 0.03;
-				
-			}, 10);
+		/**
+		 * Do the magic!
+		 */
+		for ( var i = 0; i < lazySelector.length; i++ ) {
 			
-			// Add class to loaded element to prevent any more actions on it
-			lazySelector[index].classList.add("lazy-loaded");
+			/**
+			 * Position of lazy loaded element from the top
+			 */
+			var ypos = lazySelector[i].offsetTop;
+			
+			
+			if ( yscroll > ypos + offset ) {
+				
+				( function() {
+				
+					var j = i,
+					currentDiv = lazySelector[j],
+					timer = setInterval( function() {
+						
+						// Stop the clock if opacity is equal or greater than 1
+						if ( opacity >= 1 ) {
+							clearInterval(timer);
+							distance = 0; 
+							/* TODO - distance value needs to be reset as it never reaches value of "0" */
+						}
+						
+						
+						// Add distance effect
+						if ( distance > 0 ) {
+							distance -= distance * 0.05;
+						}
+						currentDiv.style.transform = "translateY(" + distance + "px)";
+						
+						
+						// Add opacity effect
+						currentDiv.style.opacity = opacity;
+						opacity += opacity * 0.03;
+						
+					}, 10 );
+					
+					// Add class to loaded element to prevent any more actions on it
+					currentDiv.classList.add("lazy-loaded");
+					
+				})();
+				
+			};
 			
 		};
-	
+		
 	};
 	
 }
+
+// Call the function on document ready and window scroll
+jsLaLo();
+window.addEventListener( 'scroll', function() { jsLaLo() } );
